@@ -1,15 +1,4 @@
 steps:
-  - trigger: "potential-waffle-integration"
-    branches: "!master"
-    build:
-      message: "${BUILDKITE_MESSAGE}"
-      commit: "${BUILDKITE_COMMIT}"
-      branch: "${BUILDKITE_BRANCH}"
-      env:
-        BUILDKITE_PULL_REQUEST: "${BUILDKITE_PULL_REQUEST}"
-        BUILDKITE_PULL_REQUEST_BASE_BRANCH: "${BUILDKITE_PULL_REQUEST_BASE_BRANCH}"
-        BUILDKITE_PULL_REQUEST_REPO: "${BUILDKITE_PULL_REQUEST_REPO}"
-
   - trigger: "potential-waffle-release"
     if: |
       // The tag must be of form <service>-<major>.<minor>.<fix> (e.g. delivery-1.10.0)
@@ -20,3 +9,14 @@ steps:
       branch: "${BUILDKITE_BRANCH}"
       env:
         BUILDKITE_TAG: "${BUILDKITE_TAG}"
+
+  - trigger: "potential-waffle-integration"
+    branches: "!master"
+    build:
+      message: "${BUILDKITE_MESSAGE}"
+      commit: "${BUILDKITE_COMMIT}"
+      branch: "${BUILDKITE_BRANCH}"
+      env:
+        BUILDKITE_PULL_REQUEST: "${BUILDKITE_PULL_REQUEST}"
+        BUILDKITE_PULL_REQUEST_BASE_BRANCH: "${BUILDKITE_PULL_REQUEST_BASE_BRANCH}"
+        BUILDKITE_PULL_REQUEST_REPO: "${BUILDKITE_PULL_REQUEST_REPO}"
