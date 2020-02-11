@@ -12,9 +12,13 @@ steps:
 
   - trigger: "potential-waffle-release"
     if: |
+      // A release is defined by a tag on the master branch.
       // The tag must be of form <service>-<major>.<minor>.<fix> (e.g. delivery-1.10.0)
+      build.branch =~ /^master\$/ &&
       build.tag =~ /^(potential|waffle)-[0-9]+\.[0-9]+\.[0-9]+\$/
     build:
       message: "${BUILDKITE_MESSAGE}"
       commit: "${BUILDKITE_COMMIT}"
       branch: "${BUILDKITE_BRANCH}"
+      env:
+        BUILDKITE_TAG: "${BUILDKITE_TAG}"
