@@ -1,0 +1,3 @@
+steps:
+  - label: "Release $BUILDKITE_TAG"
+    command: "echo \"release potential-waffle $BUILDKITE_TAG\""

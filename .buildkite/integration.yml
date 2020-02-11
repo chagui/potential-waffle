@@ -1,0 +1,3 @@
+steps:
+  - label: "Integrate $BUILDKITE_TAG"
+    command: "echo \"integrate potential-waffle $BUILDKITE_TAG\""
