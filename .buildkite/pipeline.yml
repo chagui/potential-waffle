@@ -28,3 +28,12 @@ steps:
   #       BUILDKITE_PULL_REQUEST: "${BUILDKITE_PULL_REQUEST}"
   #       BUILDKITE_PULL_REQUEST_BASE_BRANCH: "${BUILDKITE_PULL_REQUEST_BASE_BRANCH}"
   #       BUILDKITE_PULL_REQUEST_REPO: "${BUILDKITE_PULL_REQUEST_REPO}"
+
+  - label: ":github: tag"
+    commands:
+      - git tag alpha master
+      - git push --tags
+    branches: "master"
+
+  - label: "dummy"
+    command: cat .buildkite/pipeline.yml
