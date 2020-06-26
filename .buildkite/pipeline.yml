@@ -1,22 +1,39 @@
 steps:
-  - trigger: "potential-waffle-release"
-    if: |
-      // The tag must be of form <service>-<major>.<minor>.<fix> (e.g. delivery-1.10.0)
-      build.tag =~ /^(potential|waffle)-[0-9]+\.[0-9]+\.[0-9]+\$/
-    build:
-      message: "${BUILDKITE_MESSAGE}"
-      commit: "${BUILDKITE_COMMIT}"
-      branch: "${BUILDKITE_BRANCH}"
-      env:
-        BUILDKITE_TAG: "${BUILDKITE_TAG}"
+  # Create a buildkite pipeline named "potential-waffle-release" using the
+  # release.yml file before uncommenting this block.
+  # - trigger: "potential-waffle-release"
+  #   if: |
+  #     // The tag must be of form <service>-<major>.<minor>.<fix> (e.g. delivery-1.10.0)
+  #     build.tag =~ /^(potential|waffle)-[0-9]+\.[0-9]+\.[0-9]+\$/
+  #   build:
+  #     message: "${BUILDKITE_MESSAGE}"
+  #     commit: "${BUILDKITE_COMMIT}"
+  #     branch: "${BUILDKITE_BRANCH}"
+  #     env:
+  #       BUILDKITE_TAG: "${BUILDKITE_TAG}"
 
-  - trigger: "potential-waffle-integration"
-    branches: "!master"
-    build:
-      message: "${BUILDKITE_MESSAGE}"
-      commit: "${BUILDKITE_COMMIT}"
-      branch: "${BUILDKITE_BRANCH}"
-      env:
-        BUILDKITE_PULL_REQUEST: "${BUILDKITE_PULL_REQUEST}"
-        BUILDKITE_PULL_REQUEST_BASE_BRANCH: "${BUILDKITE_PULL_REQUEST_BASE_BRANCH}"
-        BUILDKITE_PULL_REQUEST_REPO: "${BUILDKITE_PULL_REQUEST_REPO}"
+  - command: .buildkite/pipeline.sh | buildkite-agent pipeline upload
+    label: ":waffle: Upload"
+    if: build.branch =~ /^release-([0-9]|[1-9][0-9]+)(\.[0-9]|[1-9][0-9]+){2}$$/
+
+  # Create a buildkite pipeline named "potential-waffle-integration" using the
+  # integration.yml file before uncommenting this block.
+  # - trigger: "potential-waffle-integration"
+  #   branches: "!master"
+  #   build:
+  #     message: "${BUILDKITE_MESSAGE}"
+  #     commit: "${BUILDKITE_COMMIT}"
+  #     branch: "${BUILDKITE_BRANCH}"
+  #     env:
+  #       BUILDKITE_PULL_REQUEST: "${BUILDKITE_PULL_REQUEST}"
+  #       BUILDKITE_PULL_REQUEST_BASE_BRANCH: "${BUILDKITE_PULL_REQUEST_BASE_BRANCH}"
+  #       BUILDKITE_PULL_REQUEST_REPO: "${BUILDKITE_PULL_REQUEST_REPO}"
+
+  - label: ":github: tag"
+    commands:
+      - git tag waffle-0.5.3 origin/master
+      - git push origin waffle-0.5.3
+    branches: "master"
+
+  - label: "dummy"
+    command: cat .buildkite/pipeline.yml
